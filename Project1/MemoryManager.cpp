@@ -20,7 +20,6 @@ void MemoryManager::attach(const std::string_view& process_name)
 	}
 
 	if (std::string(process_entry.szExeFile) == process_name) {
-		CloseHandle(snapshot);
 		// (Notice the usage of PROCESS_ALL_ACCESS flag in order to grant read/write privileges)
 		m_process_handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_entry.th32ProcessID);
 		m_process_id = process_entry.th32ProcessID;
@@ -29,12 +28,15 @@ void MemoryManager::attach(const std::string_view& process_name)
 
 	while(Process32Next(snapshot, &process_entry))
 	{
-		if (std::string(process_entry.szExeFile) != process_name) {
+		if (std::string(process_entry.szExeFile) == process_name) {
+			CloseHandle(snapshot);
 			m_process_handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_entry.th32ProcessID);
 			m_process_id = process_entry.th32ProcessID;
+			return;
 		}
 	}
 	CloseHandle(snapshot);
+
 }
 
 void MemoryManager::get_module(const std::string_view& module_name)
@@ -47,6 +49,7 @@ void MemoryManager::get_module(const std::string_view& module_name)
 
 	MODULEENTRY32 module_entry{};
 	module_entry.dwSize = sizeof(decltype(module_entry));
+
 	if (!Module32First(snapshot, &module_entry)) {
 		std::string exception("No process running for module: " + std::string(module_name));
 		CloseHandle(snapshot);

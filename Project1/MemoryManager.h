@@ -20,14 +20,15 @@ public:
 	template<typename T>
 	T read_memory(DWORD addr) const noexcept {
 		T value;
-		ReadProcessMemory(m_process_handle, reinterpret_cast<LPVOID>(addr), value, sizeof(T), NULL);
+		ReadProcessMemory(m_process_handle, reinterpret_cast<LPVOID>(addr), &value, sizeof(T), NULL);
 		return value;
 	}
 
 	template<typename T>
 	bool write_memory(DWORD addr, const T& value) const noexcept
 	{
-		return WriteProcessMemory(m_process_handle, addr, value, sizeof(T), NULL) == true;
+		const auto result = WriteProcessMemory(m_process_handle, reinterpret_cast<LPVOID>(addr), &value, sizeof(T), NULL);
+		return result;
 	}
 
 	[[nodiscard]] const auto get_process_id() const noexcept
