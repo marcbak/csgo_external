@@ -39,7 +39,7 @@ void MemoryManager::attach(const std::string_view& process_name)
 
 }
 
-void MemoryManager::get_module(const std::string_view& module_name)
+MODULEENTRY32 MemoryManager::get_module(const std::string_view& module_name)
 {
 	auto snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, m_process_id);
 	if (snapshot == INVALID_HANDLE_VALUE) {
@@ -57,18 +57,17 @@ void MemoryManager::get_module(const std::string_view& module_name)
 	}
 	if (std::string(module_entry.szModule) == module_name) {
 		CloseHandle(snapshot);
-		m_module = module_entry;
-		return;
+		return module_entry;
 	}
 	while (Module32Next(snapshot, &module_entry))
 	{
 		if (std::string(module_entry.szModule) ==  module_name)
 		{
 			CloseHandle(snapshot);
-			m_module = module_entry;
-			return;
+			return module_entry;
 		}
 	}
 
 	CloseHandle(snapshot);
+	return module_entry;
 }

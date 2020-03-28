@@ -7,14 +7,17 @@
 class MemoryManager
 {
 public:
-	MemoryManager() : m_module(), m_process_id(), m_process_handle(INVALID_HANDLE_VALUE)
+	MemoryManager() : m_engine_module(), m_game_module(), m_process_id(), m_process_handle(INVALID_HANDLE_VALUE)
 	{
+		attach("csgo.exe");
+		m_game_module   = get_module("client_panorama.dll");
+		m_engine_module = get_module("engine.dll");
 	}
 	~MemoryManager() = default;
 
 	void attach(const std::string_view& process_name);
 
-	void get_module(const std::string_view& module_name);
+	MODULEENTRY32 get_module(const std::string_view& module_name);
 
 
 	template<typename T>
@@ -41,13 +44,19 @@ public:
 		return m_process_handle;
 	} 
 
-	MODULEENTRY32 get_module() const noexcept 
+	MODULEENTRY32 get_engine_module() const noexcept
 	{
-		return m_module;
+		return m_engine_module;
+	}
+
+	MODULEENTRY32 get_game_module() const noexcept 
+	{
+		return m_game_module;
 	}
 
 private:
-	MODULEENTRY32 m_module;
+	MODULEENTRY32 m_game_module;
+	MODULEENTRY32 m_engine_module;
 	DWORD m_process_id;
 	HANDLE m_process_handle;
 };
