@@ -6,7 +6,8 @@
 class Entity
 {
 public:
-	Entity(const Offsets& offsets, MemoryManager& mem_manager, const DWORD game_module) : m_offsets(offsets), m_mem_manager(mem_manager), m_game_module(game_module), m_base_entity_list(game_module + m_offsets.entity_list)
+	Entity(const Offsets& offsets, MemoryManager& mem_manager, const DWORD game_module) : m_offsets(offsets), m_mem_manager(mem_manager), 
+		m_game_module(game_module), m_base_entity_list(game_module + m_offsets.entity_list)
 	{
 	}
 
