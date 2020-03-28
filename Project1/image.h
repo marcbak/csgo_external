@@ -25,28 +25,26 @@ namespace Image
 		return false;
 	}
 
-	bool world_to_screen(const LocalPlayerInfo& local_player, const D3DXVECTOR3& origin, D3DXVECTOR3& screen, int w, int h)
+	void world_to_screen(const LocalPlayerInfo& local_player, const D3DXVECTOR3& origin, D3DXVECTOR3& screen, int w, int h)
 	{
-		if (!screen_transform(local_player, origin, screen)) {
-			screen.x = (w / 2.0f) + (screen.x * w) / 2;
-			screen.y = (h / 2.0f) - (screen.y * h) / 2;
-
-			return true;
+		if (screen_transform(local_player, origin, screen)) {
+			return;
 		}
-		return false;
+		screen.x = (w / 2.0f) + (screen.x * w) / 2;
+		screen.y = (h / 2.0f) - (screen.y * h) / 2;
 	}
 
 	D3DXVECTOR3 calculate_angle(const D3DXVECTOR3& source, const D3DXVECTOR3& destination)
 	{
-		constexpr float pi = 3.141592653589793;
+		constexpr float pi = 3.14159f;
 		D3DXVECTOR3 angles{};
 		D3DXVECTOR3 delta = source - destination;
 
 		// przeciwprostok¹tna
-		const float hyp = sqrt(delta.x * delta.x + delta.y * delta.y);
+		const float hyp = sqrtf(delta.x * delta.x + delta.y * delta.y);
 
-		angles.x = asin(delta.z / hyp) * (180.0f / pi);
-		angles.y = atan(delta.y / delta.x) * (180.0f / pi);
+		angles.x = asinf(delta.z / hyp) * (180.0f / pi);
+		angles.y = atanf(delta.y / delta.x) * (180.0f / pi);
 
 		if (angles.y < 0) {
 			angles.y += 360;
