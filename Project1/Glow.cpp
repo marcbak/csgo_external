@@ -9,13 +9,12 @@
 void Glow::do_glow() const noexcept
 {
     while (true) {
-        for (int entity_id = 0; entity_id <= MAX_PLAYERS; entity_id++) {
+        for (int entity_id = 1; entity_id <= MAX_PLAYERS + 1; entity_id++) {
             const auto entity_base = m_entity.get_entity_base(entity_id);
             const auto entity_team = m_entity.get_entity_team(entity_base);
             if (entity_team != m_local_playerinfo.get_team()) {
                 m_entity.glow_esp(entity_id, entity_base, 255, 255, 255, 255);
             }
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        }       
     }
 }
