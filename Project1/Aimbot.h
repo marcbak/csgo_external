@@ -20,6 +20,8 @@ private:
     void aim_at(const DWORD player_to_aim_at, const int player_id) const noexcept;
     D3DXVECTOR3 get_aiming_angle(const DWORD player_to_aim_at) const noexcept;
     DWORD get_closest_alive_player() const noexcept;
+
+private: 
     bool m_should_humanize = true;
     const Entity& m_entity;
     const LocalPlayerInfo& m_local_playerinfo;

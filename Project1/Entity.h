@@ -93,7 +93,7 @@ public:
     bool is_valid(const DWORD entity_base) const
     {
         const auto dormant = m_mem_manager.read_memory<bool>(entity_base + Offsets::dormant);
-        return is_alive(entity_base) && !dormant;
+        return entity_base != NULL && is_alive(entity_base) && !dormant;
     }
 
     bool is_visible(const DWORD entity_base, const int player_id) const

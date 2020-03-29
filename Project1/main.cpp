@@ -20,6 +20,7 @@ int main()
     Aimbot aimbot { entity, local_playerinfo, mem_manager };
     TriggerBot trigger_bot{ entity, local_playerinfo, mem_manager };
     Glow glow{ entity, local_playerinfo, mem_manager };
+
     std::thread trigger_thread { &TriggerBot::do_trigger, trigger_bot };
     std::thread glow_thread { &Glow::do_glow, glow };
     std::thread aimbot_thread { &Aimbot::do_aim, aimbot };
